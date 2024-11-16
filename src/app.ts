@@ -11,7 +11,9 @@ const baseUrl: string = "/onyx/api/v1";
 const main = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({
+      // force: true,
+    });
     console.log(chalk.bgCyanBright("Database connected successfully."));
 
     app.use(express.json());

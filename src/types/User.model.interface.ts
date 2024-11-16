@@ -12,5 +12,5 @@ export default interface User
   lastname: string;
   phone: string;
   email: string;
-  password: string;
+  password?: string;
 }
