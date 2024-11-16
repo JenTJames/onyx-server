@@ -72,6 +72,10 @@ export const createUser = async (
       !user.phone
     )
       throw createError(400, "Invalid user details");
+    // Check if the email is already taken by another user
+    const existingUser = await findUserByEmail(user.email);
+    if (existingUser)
+      throw createError(403, "Email already taken by another user");
     const hashedPassword = await bcrypt.hash(user.password, 12);
     user.password = hashedPassword;
     await saveUser(user);
