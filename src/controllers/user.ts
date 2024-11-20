@@ -31,11 +31,10 @@ export const authenticateUser = async (
   try {
     if (!credentials.email || !credentials.password)
       throw createError(403, "Invalid credentials");
-    const user = await findUserByEmail(credentials.email);
+    const user = await findUserByEmail(credentials.email, false);
     if (!user) throw createError(403, "Invalid credentials");
-    const isValid = bcrypt.compare(credentials.password, user.password!);
+    const isValid = await bcrypt.compare(credentials.password, user.password!);
     if (!isValid) throw createError(403, "Invalid credentials");
-    const safeUser = hideSensitiveDetails(user);
     res.status(200).send({ ...user.dataValues, password: undefined });
   } catch (error) {
     next(error);
@@ -83,27 +82,4 @@ export const createUser = async (
   } catch (error) {
     next(error);
   }
-};
-
-/**
- * Removes sensitive information from a user object.
- *
- * This function takes a user object and returns a new object with all properties
- * except the password. It handles both plain objects and Sequelize model instances.
- *
- * @param user - The user object from which to remove sensitive details.
- *               This can be either a plain JavaScript object or a Sequelize model instance.
- *
- * @returns A new object containing all user properties except the password.
- *          If the input is a Sequelize model instance, it returns the data values
- *          without the password. Otherwise, it returns a shallow copy of the input
- *          object with the password set to undefined.
- */
-export const hideSensitiveDetails = (user: UserModel) => {
-  if (user.dataValues)
-    return {
-      ...user.dataValues,
-      password: undefined,
-    };
-  return { ...user, password: undefined };
 };
