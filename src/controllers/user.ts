@@ -30,11 +30,11 @@ export const authenticateUser = async (
   const credentials: Auth = req.body;
   try {
     if (!credentials.email || !credentials.password)
-      throw createError(403, "Invalid credentials");
+      throw createError(401, "Invalid credentials");
     const user = await findUserByEmail(credentials.email, false);
-    if (!user) throw createError(403, "Invalid credentials");
+    if (!user) throw createError(401, "Invalid credentials");
     const isValid = await bcrypt.compare(credentials.password, user.password!);
-    if (!isValid) throw createError(403, "Invalid credentials");
+    if (!isValid) throw createError(401, "Invalid credentials");
     res.status(200).send({ ...user.dataValues, password: undefined });
   } catch (error) {
     next(error);
