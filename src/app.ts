@@ -1,3 +1,4 @@
+import cors from "cors";
 import chalk from "chalk";
 import userRoutes from "./routes/user";
 import sequelize from "./lib/database";
@@ -16,6 +17,7 @@ const main = async () => {
     });
     console.log(chalk.bgCyanBright("Database connected successfully."));
 
+    app.use(cors());
     app.use(express.json());
     app.use(`${baseUrl}/users`, userRoutes);
     app.use(errorHandler);
