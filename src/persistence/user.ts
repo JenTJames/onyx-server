@@ -29,6 +29,34 @@ export const findUserByEmail = (
     },
   });
 
+/**
+ * Finds a user by their phone number in the database.
+ *
+ * @param phone - The phone number of the user to find.
+ * @param excludePassword - If true, the password field will be excluded from the returned user object.
+ *                          Defaults to true.
+ *
+ * @returns A Promise that resolves to a User object if a user with the given phone number is found,
+ *          or null if no user is found. If `excludePassword` is true, the password field will be excluded.
+ *
+ * @example
+ * ```typescript
+ * const user = await findUserByPhone("1234567890");
+ * console.log(user?.phone); // "1234567890"
+ * console.log(user?.password); // undefined
+ * ```
+ */
+export const findUserByPhone = (
+  phone: string,
+  excludePassword: boolean = true
+) =>
+  User.findOne({
+    where: { phone },
+    attributes: {
+      exclude: excludePassword ? ["password"] : [],
+    },
+  });
+
 export const saveUser = (user: UserType) => {
   return User.create(user);
 };

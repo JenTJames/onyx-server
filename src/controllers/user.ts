@@ -4,7 +4,11 @@ import Auth from "../types/Auth.interface";
 import User from "../types/User.interface";
 import UserModel from "../types/User.model.interface";
 import { NextFunction, Request, Response } from "express";
-import { findUserByEmail, saveUser } from "../persistence/user";
+import {
+  findUserByEmail,
+  findUserByPhone,
+  saveUser,
+} from "../persistence/user";
 
 /**
  * Authenticates a user based on provided email and password credentials.
@@ -18,7 +22,7 @@ import { findUserByEmail, saveUser } from "../persistence/user";
  * @param res - The Express response object used to send the response.
  * @param next - The Express next function for passing control to the next middleware.
  *
- * @throws {Error} Throws a 403 Forbidden error if credentials are invalid or user is not found.
+ * @throws {Error} Throws a 401 Unauthorized error if credentials are invalid or user is not found.
  *
  * @returns {Promise<void>} A promise that resolves when authentication is complete.
  */
@@ -72,9 +76,10 @@ export const createUser = async (
     )
       throw createError(400, "Invalid user details");
     // Check if the email is already taken by another user
-    const existingUser = await findUserByEmail(user.email);
-    if (existingUser)
-      throw createError(403, "Email already taken by another user");
+    const existingUserWithEmail = await findUserByEmail(user.email);
+    const existingUserWithPhone = await findUserByPhone(user.phone);
+    if (existingUserWithEmail) throw createError(409, "EMAIL_TAKEN");
+    if (existingUserWithPhone) throw createError(409, "PHONE_TAKEN");
     const hashedPassword = await bcrypt.hash(user.password, 12);
     user.password = hashedPassword;
     await saveUser(user);
