@@ -2,8 +2,8 @@ import bcrypt from "bcrypt";
 import createError from "http-errors";
 import Auth from "../types/Auth.interface";
 import User from "../types/User.interface";
-import UserModel from "../types/User.model.interface";
 import { NextFunction, Request, Response } from "express";
+import UserModel from "../types/models/User.model.interface";
 import {
   findUserByEmail,
   findUserByPhone,
