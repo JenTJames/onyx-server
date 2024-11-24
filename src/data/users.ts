@@ -6,7 +6,7 @@ const users: User[] = [
     firstname: "Jen",
     lastname: "James",
     phone: "8590492117",
-    email: "john@example.com",
+    email: "jenthomasjames123@gmail.com",
     password: "Password32",
     roleId: 1,
   },
