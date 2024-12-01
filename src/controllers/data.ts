@@ -1,9 +1,11 @@
+import bcrypt from "bcrypt";
 import Role from "../models/Role";
 import User from "../models/User";
 import users from "../data/users";
 import roles from "../data/roles";
-import bcrypt from "bcrypt";
+import Status from "../models/Status";
 import database from "../lib/database";
+import statuses from "../data/statuses";
 import { NextFunction, Request, Response } from "express";
 
 /**
@@ -59,6 +61,7 @@ export const refreshData = async (
       force: true,
       alter: true,
     });
+    await Status.bulkCreate(statuses);
     await Role.bulkCreate(roles);
     await createUsers();
 
