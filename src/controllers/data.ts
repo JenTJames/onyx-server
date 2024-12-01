@@ -3,6 +3,8 @@ import Role from "../models/Role";
 import User from "../models/User";
 import users from "../data/users";
 import roles from "../data/roles";
+import Team from "../models/Team";
+import teams from "../data/teams";
 import Status from "../models/Status";
 import database from "../lib/database";
 import statuses from "../data/statuses";
@@ -37,7 +39,7 @@ const createUsers = async () => {
  * @remarks
  * This function is responsible for resetting the database by dropping and recreating tables,
  * then populating them with new data. It uses the `database.sync` method to synchronize the
- * database schema with the models, and the `Role.bulkCreate` and `createUsers` functions to
+ * database schema with the models, and the database models to
  * populate the tables with initial data.
  *
  * @param {Request} req - The Express request object.
@@ -63,6 +65,7 @@ export const refreshData = async (
     });
     await Status.bulkCreate(statuses);
     await Role.bulkCreate(roles);
+    await Team.bulkCreate(teams);
     await createUsers();
 
     console.log("Database refreshed successfully.");

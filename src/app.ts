@@ -4,6 +4,7 @@ import userRoutes from "./routes/user";
 import roleRoutes from "./routes/role";
 import dataRoutes from "./routes/data";
 import sequelize from "./lib/database";
+import teamRoutes from "./routes/team";
 import statusRoutes from "./routes/status";
 import express, { Express } from "express";
 import errorHandler from "./middlewares/error";
@@ -31,10 +32,11 @@ const main = async () => {
 
     app.use(cors());
     app.use(express.json());
+    app.use(`${baseUrl}/data`, dataRoutes);
+    app.use(`${baseUrl}/teams`, teamRoutes);
     app.use(`${baseUrl}/users`, userRoutes);
     app.use(`${baseUrl}/roles`, roleRoutes);
     app.use(`${baseUrl}/statuses`, statusRoutes);
-    app.use(`${baseUrl}/data`, dataRoutes);
     app.use(errorHandler);
   } catch (error) {
     console.error(
