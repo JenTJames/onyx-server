@@ -1,3 +1,4 @@
+import Role from "../models/Role";
 import User from "../models/User";
 import UserType from "../types/User.interface";
 
@@ -55,6 +56,19 @@ export const findUserByPhone = (
     attributes: {
       exclude: excludePassword ? ["password"] : [],
     },
+  });
+
+/**
+ * Finds a user by their unique identifier (ID) in the database without including the user password. The returned user will also include the role of the user.
+ *
+ * @param userId - The unique identifier of the user to find.
+ * */
+export const findUserById = async (userId: number) =>
+  await User.findByPk(userId, {
+    attributes: {
+      exclude: ["password", "roleId"],
+    },
+    include: [{ model: Role, as: "role" }],
   });
 
 export const saveUser = (user: UserType) => {

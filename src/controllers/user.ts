@@ -3,12 +3,13 @@ import createError from "http-errors";
 import Auth from "../types/Auth.interface";
 import User from "../types/User.interface";
 import { NextFunction, Request, Response } from "express";
-import UserModel from "../types/models/User.model.interface";
 import {
+  findUserById,
   findUserByEmail,
   findUserByPhone,
   saveUser,
 } from "../persistence/user";
+import IdInParams from "../types/IdInParams.interface";
 
 /**
  * Authenticates a user based on provided email and password credentials.
@@ -40,6 +41,34 @@ export const authenticateUser = async (
     const isValid = await bcrypt.compare(credentials.password, user.password!);
     if (!isValid) throw createError(401, "Invalid credentials");
     res.status(200).send({ ...user.dataValues, password: undefined });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Retrieves a user by their unique identifier.
+ *
+ * This function accepts a user's unique identifier (ID) as a parameter, fetches the user's details from the database,
+ * and sends the user's information as a response. If the user is not found, it passes the error to the next middleware.
+ *
+ * @param {Request<IdInParams>} req - The Express request object containing the user's ID in the request parameters.
+ * @param {Response} res - The Express response object used to send the response.
+ * @param {NextFunction} next - The Express next function for passing control to the next middleware.
+ *
+ * @throws {Error} If the user is not found, it throws a 404 Not Found error.
+ *
+ * @returns {Promise<void>} A promise that resolves when the user's details are fetched and sent as a response.
+ */
+export const getUserById = async (
+  req: Request<IdInParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const user = await findUserById(id);
+    res.status(200).send(user);
   } catch (error) {
     next(error);
   }
