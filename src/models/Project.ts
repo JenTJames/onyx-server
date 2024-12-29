@@ -14,7 +14,7 @@ const Project = database.define<Project>("projects", {
     },
     description: {
         type: DataTypes.TEXT,
-    }
+    },
 }, {
     hooks: {
         beforeCreate: async (project: any, options: any) => {
@@ -28,9 +28,9 @@ const Project = database.define<Project>("projects", {
                 });
 
                 // Generate the new ID
-                const lastId = lastProject?.id || 'PRJ000';
-                const numberPart = parseInt(lastId.replace('PRJ00', ''), 10);
-                project.id = `PRJ00${numberPart + 1}`;
+                const lastId = lastProject?.id || 'PR000';
+                const numberPart = parseInt(lastId.replace('PR00', ''), 10);
+                project.id = `PR00${numberPart + 1}`;
 
                 // Commit the transaction
                 await transaction.commit();
