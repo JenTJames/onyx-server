@@ -7,6 +7,7 @@ import sequelize from "./lib/database";
 import teamRoutes from "./routes/team";
 import statusRoutes from "./routes/status";
 import express, { Express } from "express";
+import projectRoutes from "./routes/project";
 import errorHandler from "./middlewares/error";
 import { defineAssociations } from "./models/associations";
 
@@ -37,6 +38,7 @@ const main = async () => {
     app.use(`${baseUrl}/users`, userRoutes);
     app.use(`${baseUrl}/roles`, roleRoutes);
     app.use(`${baseUrl}/statuses`, statusRoutes);
+    app.use(`${baseUrl}/projects`, projectRoutes);
     app.use(errorHandler);
   } catch (error) {
     console.error(

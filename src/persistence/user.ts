@@ -71,6 +71,12 @@ export const findUserById = async (userId: number) =>
     include: [{ model: Role, as: "role" }],
   });
 
-export const saveUser = (user: UserType) => {
-  return User.create(user);
+/**
+ * Saves a user to the database.
+ *
+ * @param {UserType} user - The user object to be saved.
+ * @returns {Promise<User>} A promise that resolves to the created user.
+ */
+export const saveUser = async (user: UserType): Promise<User> => {
+  return await User.create(user);
 };
