@@ -8,6 +8,8 @@ import teams from "../data/teams";
 import Status from "../models/Status";
 import database from "../lib/database";
 import statuses from "../data/statuses";
+import projects from "../data/projects";
+import Project from "../models/Project";
 import { NextFunction, Request, Response } from "express";
 
 /**
@@ -67,6 +69,7 @@ export const refreshData = async (
     await Role.bulkCreate(roles);
     await Team.bulkCreate(teams);
     await createUsers();
+    await Project.bulkCreate(projects);
 
     console.log("Database refreshed successfully.");
     res.sendStatus(201);
