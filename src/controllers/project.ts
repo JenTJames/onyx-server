@@ -1,7 +1,7 @@
 import createHttpError from "http-errors";
 import Project from "../types/Project.interface";
 import { NextFunction, Request, Response } from "express";
-import { findProjectByTitle, saveProject } from "../persistence/project";
+import { findAllProjects, findProjectByTitle, saveProject } from "../persistence/project";
 import { findUserById } from "../persistence/user";
 
 
@@ -36,3 +36,31 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
         next(error);
     }
 }
+
+/**
+ * Retrieves projects based on the owner ID provided in the request parameters.
+ * If an owner ID is provided, it fetches projects associated with that owner.
+ * If no owner ID is provided, it fetches all projects.
+ *
+ * @param req - The request object containing the owner ID in the parameters.
+ * @param res - The response object used to send the retrieved projects.
+ * @param next - The next middleware function in the stack.
+ * 
+ * @throws {HttpError} If the owner ID is provided but no user is found with that ID.
+ */
+export const getProjectsByOwner = async (req: Request, res: Response, next: NextFunction) => {
+    const ownerId = req.params.ownerId;
+    try {
+        let projects = [];
+
+        if (ownerId) {
+            const owner = await findUserById(+ownerId);
+            if (!owner) throw createHttpError(400, "Could not find a user with the ID: " + ownerId);
+            projects = await owner.getProjects();
+        }
+        else projects = await findAllProjects();
+        res.status(200).send(projects);
+    } catch (error) {
+        next(error);
+    }
+};

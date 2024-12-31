@@ -10,3 +10,10 @@ export const findProjectByTitle = async (title: string): Promise<Project | null>
  * @returns {Promise<Project>} A promise that resolves to the created project.
  */
 export const saveProject = async (project: ProjectType): Promise<ProjectType> => await Project.create(project);
+
+/**
+ * Retrieves all projects from the database.
+ *
+ * @returns {Promise<Project[]>} A promise that resolves to an array of Project objects.
+ */
+export const findAllProjects = async (): Promise<Project[]> => await Project.findAll();
