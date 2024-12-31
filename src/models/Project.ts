@@ -21,15 +21,15 @@ const Project = database.define<Project>("projects", {
             const transaction: Transaction = await database.transaction();
 
             try {
-                // Fetch the last project ID in a transactional context
                 const lastProject = await Project.findOne({
                     order: [['id', 'DESC']],
-                    transaction, // Ensure this query is part of the transaction
+                    transaction,
                 });
 
                 // Generate the new ID
                 const lastId = lastProject?.id || 'PR000';
-                const numberPart = parseInt(lastId.replace('PR00', ''), 10);
+                const numberPart = +lastId.split("00")[1];
+                console.log(numberPart);
                 project.id = `PR00${numberPart + 1}`;
 
                 // Commit the transaction
