@@ -17,3 +17,5 @@ export const saveProject = async (project: ProjectType): Promise<ProjectType> =>
  * @returns {Promise<Project[]>} A promise that resolves to an array of Project objects.
  */
 export const findAllProjects = async (): Promise<Project[]> => await Project.findAll();
+
+export const findProjectById = async (id: string): Promise<Project | null> => await Project.findByPk(id);

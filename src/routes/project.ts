@@ -1,9 +1,10 @@
 import express from "express";
-import { createProject, getProjectsByOwner } from "../controllers/project";
+import { createProject, getProjectById, getProjectsByOwner } from "../controllers/project";
 
 const router = express.Router();
 
 router.get("", getProjectsByOwner);
+router.get("/:projectId", getProjectById);
 
 router.post("", createProject);
 

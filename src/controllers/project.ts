@@ -1,7 +1,7 @@
 import createHttpError from "http-errors";
 import Project from "../types/Project.interface";
 import { NextFunction, Request, Response } from "express";
-import { findAllProjects, findProjectByTitle, saveProject } from "../persistence/project";
+import { findAllProjects, findProjectById, findProjectByTitle, saveProject } from "../persistence/project";
 import { findUserById } from "../persistence/user";
 
 
@@ -60,6 +60,17 @@ export const getProjectsByOwner = async (req: Request, res: Response, next: Next
         }
         else projects = await findAllProjects();
         res.status(200).send(projects);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
+    const projectId: string = req.params.projectId;
+    try {
+        const project = await findProjectById(projectId);
+        if (!project) throw createHttpError(400, "Could not find a project with the given ID: " + projectId)
+        res.status(200).send(project);
     } catch (error) {
         next(error);
     }
